@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import pizza from './images/pizza.png'
-import AddressBox from './AddressBox'
  
 const PizzaMarker = ({  img_src }) => <div><img src={img_src} className="PizzaMarker" onClick={this.showInformation} width = "20" height = "20" style={{}} /></div>;
 
@@ -50,7 +49,11 @@ export default class MapContainer extends Component {
                 />
 
               )
-            })}  
+            })}
+        <div>
+        <button class="button"> Show All </button>
+        <button class="button"> Show Relevant </button>
+        </div>
       </GoogleMapReact>
 
     );
