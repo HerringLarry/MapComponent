@@ -5,11 +5,6 @@ import MapContainer from './components/mapcontainer'
 const Label = ({ text }) => <div>{text}</div>;
  
 export default class App extends Component {
-  static defaultProps = {
-    center: {lat: 40.758896, lng: -73.985130},
-    zoom: 11
-  };
- 
   render() {
     return (
       <MapContainer />
