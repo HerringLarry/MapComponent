@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
+import PizzaMarker from './marker'
 import pizza from './images/pizza.png'
- 
-const PizzaMarker = ({  img_src }) => <div><img src={img_src} className="PizzaMarker" onClick={this.showInformation} width = "20" height = "20" style={{}} /></div>;
+import pink_circle from './images/pink-circle.png'
 
 
 
@@ -14,26 +14,39 @@ export default class MapContainer extends Component {
     }
   }
 
-
   componentDidMount(){
-    // or you can set markers list somewhere else
-    // please also set your correct lat & lng
-    // you may only use 1 image for all markers, if then, remove the img_src attribute ^^
     this.setState({
-      markers: [{lat: 40.758896, lng: -73.985130, img_src: pizza, currentLocation: false}],
-      currentLocationMarkerIndex: -1
+      markers: [{lat: 40.758896, lng: -73.985130,img_src: pizza, currentLocation: false}],
+      currentLocationMarkerIndex: -1,
+      addedCurrent: false,
+      showPrompt: true
     });
   }
 
   addMarker(lati,long){
-    
-    this.state.currentLocationMarkerIndex = this.state.markers.push({lat: lati, lng: long, img_src: pizza, currentLocation: true}) - 1; 
-    this.forceUpdate();
+    if(!this.state.addedCurrent){
+      this.state.currentLocationMarkerIndex = this.state.markers.push({lat: lati, lng: long,img_src:pink_circle , currentLocation: true}) - 1; 
+      this.state.addedCurrent=true;
+      this.state.showPrompt= false;
+      this.forceUpdate();
+      
+    }
   }
 
   removeCurrent(){
-    this.state.markers.splice(this.state.currentLocationMarkerIndex);
-    this.forceUpdate();
+    if(this.state.addedCurrent){
+      this.state.markers.splice(this.state.currentLocationMarkerIndex);
+      this.state.addedCurrent=false;
+      this.state.showPrompt=true;
+      this.forceUpdate();
+      
+    }
+  }
+
+  returnRelevantMarker(){
+    //Call to API
+    //populate markers array
+    this.forceUpdate()
   }
 
 
@@ -45,6 +58,7 @@ export default class MapContainer extends Component {
  
   render() {
     return (
+      <div style={{width: '100%', height: '400px'}}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: 'AIzaSyAIQZMVYWhDwlR9mqBRL-dOGxW3LwLV-ds' }}
         defaultCenter={this.props.center}
@@ -55,19 +69,26 @@ export default class MapContainer extends Component {
         {this.state.markers.map((marker, i) =>{
               return(
                 <PizzaMarker
+                  key={i}
                   lat={marker.lat}
                   lng={marker.lng}
                   img_src={marker.img_src}
-                />
+                  onClick={() => this.handleToggleClose()}
+                >
+
+                </PizzaMarker>
 
               )
             })}
-        <div>
-        <button className="button"> Show All </button>
+        
+      </GoogleMapReact>
+      <div class="text-center">
+        <button className="button" > Show All </button>
         <button className="button"> Show Relevant </button>
         <button className="button" onClick = {this.removeCurrent.bind(this)}> Reset Current </button>
         </div>
-      </GoogleMapReact>
+        {this.state.showPrompt && (<div class="InitialPrompt">Please Click Your Current Location </div>)}
+      </div>
 
     );
   }
