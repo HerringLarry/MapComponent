@@ -21,6 +21,19 @@ body {
     justify-content: center
 }
 
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.city {
+	font-family: Roboto;
+  	font-size: 10px;
+  	font-weight: bold;
+  	background-color:lightblue;
+  	opacity: 0.5;
+}
+
 .button:after {
     content: "";
     background: #f1f1f1;

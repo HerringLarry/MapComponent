@@ -14,6 +14,7 @@ export default class MapContainer extends Component {
     }
   }
 
+  //creates marker array and other state variables
   componentDidMount(){
     this.setState({
       markers: [{lat: 40.758896, lng: -73.985130,img_src: pizza, currentLocation: false}],
@@ -23,6 +24,7 @@ export default class MapContainer extends Component {
     });
   }
 
+  //Adds current location marker
   addMarker(lati,long){
     if(!this.state.addedCurrent){
       this.setState({currentLocationMarkerIndex: this.state.markers.length});
@@ -37,11 +39,14 @@ export default class MapContainer extends Component {
     }
   }
 
+  //Removes current location marker
   removeCurrent(){
     if(this.state.addedCurrent){
-      this.state.markers.splice(this.state.currentLocationMarkerIndex);
-      this.state.addedCurrent = false;
-      this.state.showPrompt = true;
+      var remove = this.state.markers
+      remove.splice(this.state.currentLocationMarkerIndex);
+      this.setState({markers: remove});
+      this.setState({addedCurrent: false});
+      this.setState({showPrompt: true});
       this.forceUpdate();
       
     }
@@ -69,7 +74,7 @@ export default class MapContainer extends Component {
         defaultZoom={this.props.zoom}
         onClick = {({x, y, lat, lng, event}) => this.addMarker(lat,lng)}
       >
-      
+
         {this.state.markers.map((marker, i) =>{
               return(
                 <PizzaMarker
@@ -95,5 +100,5 @@ export default class MapContainer extends Component {
       </div>
 
     );
-  }
+  }x
 }
