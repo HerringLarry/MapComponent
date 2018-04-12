@@ -25,9 +25,13 @@ export default class MapContainer extends Component {
 
   addMarker(lati,long){
     if(!this.state.addedCurrent){
-      this.state.currentLocationMarkerIndex = this.state.markers.push({lat: lati, lng: long,img_src:pink_circle , currentLocation: true}) - 1; 
-      this.state.addedCurrent=true;
-      this.state.showPrompt= false;
+      this.setState({currentLocationMarkerIndex: this.state.markers.length});
+      var joined = this.state.markers.concat({lat: lati, lng: long,img_src:pink_circle , currentLocation: true});
+      this.setState({
+        markers: joined
+      });  
+      this.setState({addedCurrent: true});
+      this.setState({showPrompt: false});
       this.forceUpdate();
       
     }
@@ -36,8 +40,8 @@ export default class MapContainer extends Component {
   removeCurrent(){
     if(this.state.addedCurrent){
       this.state.markers.splice(this.state.currentLocationMarkerIndex);
-      this.state.addedCurrent=false;
-      this.state.showPrompt=true;
+      this.state.addedCurrent = false;
+      this.state.showPrompt = true;
       this.forceUpdate();
       
     }
