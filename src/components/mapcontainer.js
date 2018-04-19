@@ -3,6 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import PizzaMarker from './marker'
 import pizza from './images/pizza.png'
 import pink_circle from './images/pink-circle.png'
+import axios from 'axios'
 
 
 
@@ -17,7 +18,7 @@ export default class MapContainer extends Component {
   //creates marker array and other state variables
   componentDidMount(){
     this.setState({
-      markers: [{lat: 40.758896, lng: -73.985130,img_src: pizza, currentLocation: false}],
+      markers: [{lat: 40.758896, lng: -73.985130,img_src: pizza, storeName: "Hello Pizza", currentLocation: false}],
       currentLocationMarkerIndex: -1,
       addedCurrent: false,
       showPrompt: true
@@ -53,8 +54,19 @@ export default class MapContainer extends Component {
   }
 
   returnRelevantMarker(){
-    //Call to API
-    //populate markers array
+    axios.get('http://localhost:3001/store/getAllStore').then(function(response){
+      response.data.forEach(store){
+        
+          var update = this.state.markers;
+          update.concat({lat: 40.73, lng: -73.8, img_src: pizza, storeName: store.name, currentLocation: false});
+          this.setState({markers: update});
+          console.log('done');
+        
+      };
+    })
+    .catch(error => {
+      console.log('Error fetching and parsing data', error);
+    });
     this.forceUpdate()
   }
 
@@ -91,12 +103,12 @@ export default class MapContainer extends Component {
             })}
         
       </GoogleMapReact>
-      <div class="text-center">
-        <button className="button" > Show All </button>
+      <div className="text-center">
+        <button className="button" onClick = {this.returnRelevantMarker.bind(this)} > Show All </button>
         <button className="button"> Show Relevant </button>
         <button className="button" onClick = {this.removeCurrent.bind(this)}> Reset Current </button>
         </div>
-        {this.state.showPrompt && (<div class="InitialPrompt">Please Click Your Current Location </div>)}
+        {this.state.showPrompt && (<div className="InitialPrompt">Please Click Your Current Location </div>)}
       </div>
 
     );
